@@ -1,14 +1,7 @@
-using Foundry.Models;
-using Foundry.Models.Configuration;
+using Foundry.Common.Models;
+using Foundry.Common.Transformers;
 
-var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings { Args = args, ContentRootPath = AppContext.BaseDirectory });
-var foundry = builder.Configuration.GetSection(FoundryOptions.SectionName).Get<FoundryOptions>()
-    ?? throw new InvalidOperationException("Missing Foundry configuration");
-foundry.EnsureSchemas<XmlPackets, Packets>();
-
-builder.Services.AddHostedService(sp => new TransformWorker<XmlPackets, Packets>(
-    foundry, builder.Configuration, sp.GetRequiredService<ILogger<TransformWorker<XmlPackets, Packets>>>(), Convert));
-builder.Build().Run();
+FoundryTransform.Run<XmlPackets, Packets>(args, Convert);
 
 // Payload stays base64 encoded: decoding it is the Decode transform's job.
 static Packets Convert(XmlPackets p) => new()
