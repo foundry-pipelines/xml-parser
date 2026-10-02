@@ -1,0 +1,4 @@
+name: XmlToJson
+in: XmlPackets
+out: Packets
+description: Converts XML packets to JSON; data stays base64.
