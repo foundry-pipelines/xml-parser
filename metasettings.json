@@ -1,13 +1,10 @@
 {
-  "Configs": { "Repo": "https://gitlab.com/foundry-platform/common/configs.git" },
-
-  "Logging": { "LogLevel": { "Default": "Information" } },
-
-  // Where it reads and writes. Deployed in a pipeline, the pipeline's appsettings.Production.json overrides this section.
-  "Foundry": {
-    "Pipeline": "local",
-    "Processor": "XmlToJson",
-    "Input": { "Config": "kafka/prod", "Topic": "raw.xml" },
-    "Output": { "Config": "kafka/prod", "Topic": "enrichment.packets" }
+  "Configs": {
+    "Repo": "https://gitlab.com/foundry-platform/common/configs.git"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information"
+    }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "Foundry": {
+    "Input": {
+      "Config": "kafka/load",
+      "Topic": "raw.xml"
+    },
+    "Output": {
+      "Config": "kafka/load",
+      "Topic": "enrichment.packets"
+    }
+  }
+}

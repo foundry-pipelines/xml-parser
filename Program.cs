@@ -8,7 +8,7 @@ builder.Build().Run();
 
 // XmlPackets (XML) -> Packets (JSON).
 // Reads Foundry:Input and writes Foundry:Output; a message it can't handle is logged and skipped.
-sealed class XmlToJson(IConfiguration config, ILogger<XmlToJson> log) : BackgroundService
+sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlToJson> log) : BackgroundService
 {
     const string SchemaHeader = "foundry-schema"; // tells apart the records of a dataset carrying several schemas
 
@@ -20,7 +20,7 @@ sealed class XmlToJson(IConfiguration config, ILogger<XmlToJson> log) : Backgrou
         var output = config.GetSection("Foundry:Output");
         using var consumer = new ConsumerBuilder<byte[], byte[]>(new ConsumerConfig(Kafka(input))
         {
-            GroupId = $"{config["Foundry:Pipeline"]}.{config["Foundry:Processor"]}",
+            GroupId = $"{config["Foundry:Pipeline"] ?? env.EnvironmentName}.{config["Foundry:Processor"] ?? "XmlToJson"}", // locally the environment (prod, load); deployed, the pipeline sets both
             AutoOffsetReset = AutoOffsetReset.Earliest,
             EnableAutoOffsetStore = false, // stored only after the produce succeeds
         }).Build();

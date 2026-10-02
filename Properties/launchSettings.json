@@ -3,7 +3,13 @@
     "XmlToJsonProcessor": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "prod"
+      }
+    },
+    "XmlToJsonProcessor (load)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "load"
       }
     }
   }
