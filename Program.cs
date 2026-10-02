@@ -1,9 +1,9 @@
 using Foundry.Common.Models;
-using Foundry.Common.Transformers;
+using Foundry.Common.Processors;
 
-FoundryTransform.Run<XmlPackets, Packets>(args, Convert);
+FoundryProcessor.Run<XmlPackets, Packets>(args, Convert);
 
-// Payload stays base64 encoded: decoding it is the Decode transform's job.
+// Payload stays base64 encoded: decoding it is the Decode processor's job.
 static Packets Convert(XmlPackets p) => new()
 {
     Guid = p.Guid,

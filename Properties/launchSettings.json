@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "XmlToJsonTransformer": {
+    "XmlToJsonProcessor": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
