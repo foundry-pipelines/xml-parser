@@ -1,6 +1,7 @@
 using Confluent.Kafka;
 using Foundry.Common.Models;
-using Foundry.Common.Models.Serialization;
+using System.Text.Json;
+using System.Xml.Serialization;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<XmlToJson>();
@@ -10,7 +11,7 @@ builder.Build().Run();
 // Reads Foundry:Input and writes Foundry:Output; a message it can't handle is logged and skipped.
 sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlToJson> log) : BackgroundService
 {
-    const string SchemaHeader = "foundry-schema"; // tells apart the records of a dataset carrying several schemas
+    const string TypeHeader = "foundry-type"; // tells apart the records of a topic carrying several types
 
     protected override Task ExecuteAsync(CancellationToken ct) => Task.Run(() => Run(ct), ct);
 
@@ -49,7 +50,7 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
             Packets value;
             try
             {
-                value = Process(FoundrySerializer.Deserialize<XmlPackets>(result.Message.Value));
+                value = Process(Read(result.Message.Value));
             }
             catch (FormatException e)
             {
@@ -57,8 +58,8 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
                 consumer.StoreOffset(result);
                 continue;
             }
-            var headers = new Headers { { SchemaHeader, System.Text.Encoding.UTF8.GetBytes(Packets.SchemaName) } };
-            await producer.ProduceAsync(output["Topic"], new Message<byte[], byte[]> { Key = result.Message.Key, Value = FoundrySerializer.Serialize(value), Headers = headers }, ct);
+            var headers = new Headers { { TypeHeader, System.Text.Encoding.UTF8.GetBytes(nameof(Packets)) } };
+            await producer.ProduceAsync(output["Topic"], new Message<byte[], byte[]> { Key = result.Message.Key, Value = JsonSerializer.SerializeToUtf8Bytes(value), Headers = headers }, ct);
             consumer.StoreOffset(result);
         }
         consumer.Close();
@@ -73,6 +74,21 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
         HostIp = p.HostIp,
         TargetIp = p.TargetIp,
     };
+
+    static readonly XmlSerializer Xml = new(typeof(XmlPackets));
+
+    // Bad XML throws FormatException: skipped.
+    static XmlPackets Read(byte[] value)
+    {
+        try
+        {
+            return (XmlPackets)Xml.Deserialize(new MemoryStream(value))!;
+        }
+        catch (InvalidOperationException e)
+        {
+            throw new FormatException(e.InnerException?.Message ?? e.Message, e);
+        }
+    }
 
     // ConnectionSettings from the profile; credentials from Secrets:<SecretRef>:Username/Password (env Secrets__<ref>__Username).
     ClientConfig Kafka(IConfigurationSection dataSet)
