@@ -1,5 +1,5 @@
 using Confluent.Kafka;
-using XmlToJsonProcessor.Types;
+using XmlToJsonProcessor.Models.Out;
 using System.Net;
 using System.Text.Json;
 using System.Xml.Serialization;

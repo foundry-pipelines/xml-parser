@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace XmlToJsonProcessor.Types;
+namespace XmlToJsonProcessor.Models.Out;
 
 /// <summary>A packet as JSON, payload still base64.</summary>
 public sealed class Packets

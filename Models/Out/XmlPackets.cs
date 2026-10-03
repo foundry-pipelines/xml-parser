@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
 
-namespace XmlToJsonProcessor.Types;
+namespace XmlToJsonProcessor.Models.Out;
 
 /// <summary>A raw packet as XML (<c>&lt;xml_packets&gt;</c>), payload base64.</summary>
 /// <remarks>The JSON attributes only shape its registered JSON Schema like the XML: it travels as XML.</remarks>
