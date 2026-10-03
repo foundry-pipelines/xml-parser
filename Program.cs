@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using XmlToJsonProcessor.Types;
+using System.Net;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -71,9 +72,12 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
         Guid = p.Guid,
         Data = Convert.ToBase64String(p.Data),
         TimeSent = p.TimeSent,
-        HostIp = p.HostIp,
-        TargetIp = p.TargetIp,
+        HostIp = Ip(p.HostIp),
+        TargetIp = Ip(p.TargetIp),
     };
+
+    // The address in its canonical form ("::1", not "0:0:0:0:0:0:0:1"); not an address throws FormatException: skipped.
+    static string Ip(string value) => IPAddress.Parse(value).ToString();
 
     static readonly XmlSerializer Xml = new(typeof(XmlPackets));
 

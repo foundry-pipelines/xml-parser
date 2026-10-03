@@ -1,8 +1,5 @@
-using System.ComponentModel;
-using System.Net;
 using System.Text.Json.Serialization;
 using System.Xml.Serialization;
-using Foundry.Common.Serialization;
 
 namespace XmlToJsonProcessor.Types;
 
@@ -20,16 +17,9 @@ public sealed class XmlPackets
     [XmlElement("time_sent"), JsonPropertyName("time_sent")]
     public DateTimeOffset TimeSent { get; set; }
 
-    [XmlIgnore, JsonPropertyName("host_ip"), JsonConverter(typeof(IpAddressJsonConverter))]
-    public IPAddress HostIp { get; set; } = IPAddress.None;
+    [XmlElement("host_ip"), JsonPropertyName("host_ip")]
+    public string HostIp { get; set; } = "";
 
-    [XmlIgnore, JsonPropertyName("target_ip"), JsonConverter(typeof(IpAddressJsonConverter))]
-    public IPAddress TargetIp { get; set; } = IPAddress.None;
-
-    // XmlSerializer can't handle IPAddress: these carry its string form.
-    [XmlElement("host_ip"), JsonIgnore, EditorBrowsable(EditorBrowsableState.Never)]
-    public string HostIpXml { get => HostIp.ToString(); set => HostIp = IPAddress.Parse(value); }
-
-    [XmlElement("target_ip"), JsonIgnore, EditorBrowsable(EditorBrowsableState.Never)]
-    public string TargetIpXml { get => TargetIp.ToString(); set => TargetIp = IPAddress.Parse(value); }
+    [XmlElement("target_ip"), JsonPropertyName("target_ip")]
+    public string TargetIp { get; set; } = "";
 }

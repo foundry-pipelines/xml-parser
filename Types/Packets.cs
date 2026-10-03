@@ -1,6 +1,4 @@
-using System.Net;
 using System.Text.Json.Serialization;
-using Foundry.Common.Serialization;
 
 namespace XmlToJsonProcessor.Types;
 
@@ -16,9 +14,9 @@ public sealed class Packets
     [JsonPropertyName("time_sent")]
     public DateTimeOffset TimeSent { get; set; }
 
-    [JsonPropertyName("host_ip"), JsonConverter(typeof(IpAddressJsonConverter))]
-    public IPAddress HostIp { get; set; } = IPAddress.None;
+    [JsonPropertyName("host_ip")]
+    public string HostIp { get; set; } = "";
 
-    [JsonPropertyName("target_ip"), JsonConverter(typeof(IpAddressJsonConverter))]
-    public IPAddress TargetIp { get; set; } = IPAddress.None;
+    [JsonPropertyName("target_ip")]
+    public string TargetIp { get; set; } = "";
 }
