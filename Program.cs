@@ -22,7 +22,7 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
         var output = config.GetSection("Foundry:Output");
         using var consumer = new ConsumerBuilder<byte[], byte[]>(new ConsumerConfig(Kafka(input))
         {
-            GroupId = $"{config["Foundry:Pipeline"] ?? env.EnvironmentName}.{config["Foundry:Processor"] ?? "XmlToJson"}", // locally the environment (prod, load); deployed, the pipeline sets both
+            GroupId = $"{config["Foundry:Pipeline"] ?? env.EnvironmentName}.{config["Foundry:Operator"] ?? "XmlToJson"}", // locally the environment (prod, load); deployed, the pipeline sets both
             AutoOffsetReset = AutoOffsetReset.Earliest,
             EnableAutoOffsetStore = false, // stored only after the produce succeeds
         }).Build();
@@ -66,7 +66,7 @@ sealed class XmlToJson(IConfiguration config, IHostEnvironment env, ILogger<XmlT
         consumer.Close();
     }
 
-    // Payload stays base64 encoded: decoding it is the Decode processor's job.
+    // Payload stays base64 encoded: decoding it is the Decode operator's job.
     static Packets Process(XmlPackets p) => new()
     {
         Guid = p.Guid,
