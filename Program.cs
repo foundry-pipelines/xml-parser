@@ -1,5 +1,5 @@
 using Confluent.Kafka;
-using Foundry.Common.Models;
+using XmlToJsonProcessor.Types;
 using System.Text.Json;
 using System.Xml.Serialization;
 

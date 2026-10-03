@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://gitlab.com/foundry-platform/common/scripts/-/jobs/artifacts/main/raw/operator.schema.json?job=schema
 name: XmlToJson
 description: Converts XML packets to JSON; data stays base64.
 Runtime: dotnet
