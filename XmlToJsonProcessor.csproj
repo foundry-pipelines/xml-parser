@@ -12,6 +12,7 @@
     <!-- appsettings.json from metasettings.json, profiles from the configs repo -->
     <PackageReference Include="Foundry.Common.Configuration" Version="2.*" />
     <PackageReference Include="Foundry.Common.Models" Version="2.*" />
+    <PackageReference Include="Foundry.Common.Serialization" Version="2.*" />
   </ItemGroup>
 
 </Project>
